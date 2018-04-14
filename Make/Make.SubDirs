@@ -1,0 +1,14 @@
+.PHONY: all $(SubDirs) clean distclean SubdirClean SubdirDistclean
+
+$(SubDirs):
+	$(Mkdir) $(BuildDir)/$@
+	$(Mkdir) $(BuildLibDir)
+	$(MAKE) -C $@ BuildDir=$(BuildDir)/$@ BuildLibDir=$(BuildLibDir)
+
+clean: SubdirClean
+SubdirClean:
+	@(for name in $(SubDirs); do $(MAKE) -C $$name clean BuildDir=$(BuildDir)/$$name; done)
+ 
+distclean: SubdirDistclean
+SubdirDistclean: 
+	@(for name in $(SubDirs); do $(MAKE) -C $$name distclean BuildDir=$(BuildDir)/$$name; done)
